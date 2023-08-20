@@ -8,7 +8,7 @@ RUN pip install Flask
 WORKDIR /app
 
 # Copia el código fuente de la aplicación desde la carpeta 'SRC'
-#COPY SRC/ /app/
+COPY main.py /app/
 
 # Expone el puerto en el que la aplicación Flask estará escuchando
 EXPOSE 5000
