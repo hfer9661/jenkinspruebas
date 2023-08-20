@@ -2,29 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        
-        stage('Build Docker Image') {
+        stage('Detect Versions') {
             steps {
                 script {
-                    // Construir la imagen Docker
-                    def imageName = "my-flask-app:latest"
-                    def dockerImage = docker.build(imageName, "-f Dockerfile .")
-                }
-            }
-        }
-
-        stage('Run Docker Container') {
-            steps {
-                script {
-                    def containerName = "my-flask-container"
-                    def imageName = "my-flask-app:latest"
-
-                    docker.image(imageName).run('-p 8080:5000 --name ' + containerName)
+                    def jenkinsVersion = tool name: 'jenkins', type: 'jenkins'
+                    def dockerVersion = tool name: 'docker', type: 'Tool Type' // Reemplaza 'Tool Type' con el tipo de herramienta Docker configurada en tu Jenkins
+                    
+                    echo "Jenkins Version: ${jenkinsVersion}"
+                    echo "Docker Version: ${dockerVersion}"
                 }
             }
         }
