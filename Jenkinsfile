@@ -7,11 +7,10 @@ pipeline {
                 checkout scm
             }
         }
-        
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Construir la imagen Docker
                     def imageName = "my-flask-app:latest"
                     def dockerImage = docker.build(imageName, "-f Dockerfile .")
                 }
@@ -21,12 +20,12 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Detener y eliminar el contenedor existente
-                    sh 'docker stop my-flask-container || true'
-                    sh 'docker rm my-flask-container || true'
-                    
-                    // Ejecutar el nuevo contenedor
-                    sh 'docker run -d -p 8080:5000 --name my-flask-container my-flask-app:latest'
+                    def containerName = "my-flask-container"
+                    def imageName = "my-flask-app:latest"
+
+                    sh 'docker stop $containerName || true'
+                    sh 'docker rm $containerName || true'
+                    sh "docker run -d -p 8081:5000 --name $containerName $imageName"
                 }
             }
         }
