@@ -11,8 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Agregar el contenedor Jenkins al grupo docker
-                    sh 'groupadd -g $(stat -c %g /var/run/docker.sock) docker'
+                    // No necesitas crear el grupo docker aquí
                     sh 'usermod -aG docker jenkins'
                     
                     // Construir la imagen Docker
