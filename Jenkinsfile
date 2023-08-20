@@ -1,21 +1,15 @@
-// Declarative //
 pipeline {
     agent any
 
     stages {
         stage('Build') {
             steps {
-                echo 'Building xD'
+                sh 'docker build -t my-app:latest .'
             }
         }
-        stage('Test') {
+        stage('Run') {
             steps {
-                echo 'Testing :D'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploy :P'
+                sh 'docker run -p 8080:80 my-app:latest'
             }
         }
     }
