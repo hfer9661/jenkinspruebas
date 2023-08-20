@@ -2,14 +2,29 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                sh 'docker build -t my-app:latest .'
+                checkout scm
             }
         }
-        stage('Run') {
+        
+        stage('Build Docker Image') {
             steps {
-                sh 'docker run -p 8080:80 my-app:latest'
+                script {
+                    def imageName = "my-flask-app:latest"
+                    def dockerImage = docker.build(imageName, "-f Dockerfile .")
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    def containerName = "my-flask-container"
+                    def imageName = "my-flask-app:latest"
+
+                    docker.image(imageName).run('-p 8080:5000 --name ' + containerName)
+                }
             }
         }
     }
