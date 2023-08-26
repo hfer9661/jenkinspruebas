@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        JD_IMAGE = "my-flask-app:latest"
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -15,9 +11,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.example.com', 'docker-credentials-id') {
-                        def customImage = docker.build(JD_IMAGE, "-f Dockerfile .")
-                    }
+                    def imageName = "my-flask-app:latest"
+                    sh "docker build --verbose -t $imageName -f Dockerfile ."
                 }
             }
         }
@@ -26,10 +21,11 @@ pipeline {
             steps {
                 script {
                     def containerName = "my-flask-container"
+                    def imageName = "my-flask-app:latest"
                     
                     sh "docker stop $containerName || true"
                     sh "docker rm $containerName || true"
-                    sh "docker run -d -p 8081:5000 --name $containerName $JD_IMAGE"
+                    sh "docker run -d -p 8081:5000 --name $containerName $imageName"
                 }
             }
         }
