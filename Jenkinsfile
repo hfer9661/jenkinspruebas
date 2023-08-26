@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     def imageName = "my-flask-app:latest"
-                    sh "docker build --verbose -t $imageName -f Dockerfile ."
+                    sh "docker build --progress plain -t $imageName -f Dockerfile ."
                 }
             }
         }
